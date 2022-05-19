@@ -18,7 +18,7 @@ a = select(filter(grp, lineage == "BA.2"), sample_date, number)
 b = select(filter(grp, lineage == "BA.4"), sample_date, number)
 c = select(filter(grp, lineage == "BA.5"), sample_date, number)
 
-
+#Note, all unweighted (so a day with 1 sequence counts as much as one with 100)
 df <- purrr::reduce(list(a,b,c), dplyr::left_join, by = 'sample_date')
 colnames(df) = c("sample_date", "ba2", "ba4", "ba5")
 df <- mutate(df, ba4_frac = ba4 / (ba2 + ba4 + ba5))
