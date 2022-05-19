@@ -10,6 +10,7 @@ last_date <- as.Date("2022-06-05")
 #Get case data - this takes ages 
 all_data <- fread("https://cog-uk.s3.climb.ac.uk/phylogenetics/latest/cog_metadata.csv.gz")
 our_data <- select(filter(all_data, sample_date >= first_date), lineage, sample_date)
+#Due to a notational quirk, we can collect lineages by just taking the first four characters.
 our_data <- mutate(our_data, lineage = substr(lineage, 1, 4))
 
 grp = group_by(our_data, sample_date, lineage) %>% summarise(number = n())
@@ -18,14 +19,14 @@ a = select(filter(grp, lineage == "BA.2"), sample_date, number)
 b = select(filter(grp, lineage == "BA.4"), sample_date, number)
 c = select(filter(grp, lineage == "BA.5"), sample_date, number)
 
-#Note, adding in weighting by total of BA sequences
+#Collect counts of each lineage in weighting by total of BA sequences
 df <- purrr::reduce(list(a,b,c), dplyr::left_join, by = 'sample_date')
 colnames(df) = c("sample_date", "ba2", "ba4", "ba5")
 df <- mutate(df, ba4_frac = ba4 / ba2)
 df <- mutate(df, ba5_frac = ba5 / ba2)
 wts = coalesce(df$ba2,0) + coalesce(df$ba4,0) + coalesce(df$ba5,0)
 
-
+#Regression with log2 transformation
 regba4 <- lm(log2(ba4_frac) ~ date(sample_date), data = df, weights = wts)
 regba5 <- lm(log2(ba5_frac) ~ date(sample_date), data = df, weights = wts)
 
