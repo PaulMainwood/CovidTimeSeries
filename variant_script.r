@@ -40,7 +40,7 @@ regba2121 <- lm(log2(ba2121_frac) ~ date(sample_date), data = df, weights = wtsb
 regba29 <- lm(log2(ba29_frac) ~ date(sample_date), data = df, weights = wtsba29)
 
 
-plot(date(df$sample_date), log2(df$ba4_frac), pch = 19, col = 2, xlim = c(first_date, last_date), ylim = c(-12, 0), yaxt = "n", xaxt = "n", ylab = "Ratio to BA.2, % - log2 scale", xlab = "Date", main = "BA.4, BA.5, BA.9 & BA.2.12.1 as a ratio to BA.2 in COG-UK sequences")
+plot(date(df$sample_date), log2(df$ba4_frac), pch = 19, col = 2, xlim = c(first_date, last_date), ylim = c(-12, 0), yaxt = "n", xaxt = "n", ylab = "Ratio to BA.2, % - log2 scale", xlab = "Date", main = "BA.4, BA.5, BA.2.9 & BA.2.12.1 as a ratio to BA.2 in COG-UK sequences")
 points(date(df$sample_date), pch = 19, log2(df$ba5_frac), col = 3)
 points(date(df$sample_date), pch = 19, log2(df$ba2121_frac), col = 4)
 points(date(df$sample_date), pch = 19, log2(df$ba29_frac), col = 5)
@@ -57,8 +57,8 @@ abline(regba2121, col = 4)
 abline(regba29, col = 5)
 abline(h = 0, col = "gray", lty= "dotted")
 abline(h = -1, col = "gray", lty= "dashed")
-legend("bottomright", inset = 0.05, legend = c("BA.4", "BA.5", "BA.2.12.1", "BA.9"), col = c(2, 3, 4, 5), lty = c(1, 1))
-title(sub="Plot of COG-UK data, by @paulmainwood, based on previous work from @alexselby1770. Regression weighted by inverse probability of selection; last few data points based on very small values", adj=1, line=4, font=1, cex.sub = 0.6)
+legend("bottomright", inset = 0.05, legend = c("BA.4", "BA.5", "BA.2.12.1", "BA.2.9"), col = c(2, 3, 4, 5), lty = c(1, 1))
+title(sub="Plot of COG-UK data, by @paulmainwood, based on work from @alexselby1770. Regression weighted by inverse probability of selection; last few data points based on very small values", adj=1, line=4, font=1, cex.sub = 0.6)
 
 
 
