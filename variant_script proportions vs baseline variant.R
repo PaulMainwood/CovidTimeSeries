@@ -1,4 +1,6 @@
 #Creates a plot of proportions of various selected variants vs a baseline variant
+#After http://sonorouschocolate.com/covid19/index.php/UK_variant_comparison
+#by @alexselby
 
 library(lubridate)
 library(tidyverse)
