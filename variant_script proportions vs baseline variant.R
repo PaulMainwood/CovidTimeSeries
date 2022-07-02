@@ -16,7 +16,9 @@ our_data <- select(filter(all_data, sample_date >= first_date), lineage, sample_
 
 grp = group_by(our_data, sample_date, lineage) %>% summarise(number = n())
 
-
+#Function to take new and base variant names and produce dataframes of one as 
+#fraction of the other, and regress the log of the proportions by date to give 
+#a best-fit line.
 proportions_new_variant <- function(new_variant_name, base_variant_name) {
   base = select(filter(grp, lineage == base_variant_name), sample_date, number)
   new = select(filter(grp, lineage == new_variant_name), sample_date, number)
@@ -34,6 +36,9 @@ proportions_new_variant <- function(new_variant_name, base_variant_name) {
   return(list(df = df, reg = reg))
   }
 
+
+#Use the function to grab whichever variants and base you want and plot. Manual
+#awkwardness here, since when automate, get weird visuals.
 plot(date(proportions_new_variant("BA.2", "BA.5")$df$sample_date), log2(proportions_new_variant("BA.2", "BA.5")$df$new_frac), pch = 19, col = 2, xlim = c(first_date, last_date), ylim = c(-3, 3), yaxt = "n", xaxt = "n", ylab = "Ratio to BA.5, % - log2 scale", xlab = "Date", main = "BA.2, BA.4, BA.5.1 as a ratio to BA.5 in COG-UK sequences")
 
 yticks = seq(-3, 3)
