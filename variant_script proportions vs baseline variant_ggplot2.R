@@ -31,9 +31,10 @@ proportions_new_variant <- function(new_variant_name, base_variant_name, grp) {
 
   df <- mutate(df, new_frac = new / base, new_frac_log2 = log2(new / base), new_variant_name = new_variant_name, base_variant_name = base_variant_name)
   wts <- coalesce(1/(1/df$base + 1/df$new), 0)
+  df <- mutate(df, wts = wts)
 
   #Regression with log2 transformation
-  reg <- lm(log2(new_frac) ~ date(sample_date), data = df)
+  reg <- lm(log2(new_frac) ~ date(sample_date), weights = wts, data = df)
   
   return(list(df = df, reg = reg))
   }
@@ -64,7 +65,3 @@ ggplot(df, aes(x = sample_date, y = new_frac_log2, color = new_variant_name)) +
   geom_abline(data = ablines, aes(intercept = intercept, slope = slope, colour = cols)) +
   labs(title = paste0("Selected variant frequency in COG-UK data as share of ", base_variant, " and subvariants"), caption = "Plot of COG-UK data, by @paulmainwood, based on earlier work from @alexselby1770. Regression weighted by inverse probability of selection; last few data points based on very small values, shown by fading") +
   theme(plot.caption = element_text(size = 7), plot.title = element_text(size = 16, hjust = 0.5), legend.position = c(0.94, 0.1), legend.title=element_blank())
-
-
-
-       
