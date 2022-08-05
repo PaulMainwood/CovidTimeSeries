@@ -5,6 +5,7 @@
 library(tidyverse)
 library(magrittr)
 library(data.table)
+library(lubridate)
 
 first_date <- as.Date("2022-06-15")
 last_date <- as.Date("2022-08-22")
@@ -31,7 +32,6 @@ proportions_new_variant <- function(new_variant_name, base_variant_name, grp) {
   df <- mutate(df, new_frac = new / base, new_frac_log2 = log2(new / base), new_variant_name = new_variant_name, base_variant_name = base_variant_name)
   wts <- coalesce(1/(1/df$base + 1/df$new), 0)
 
-  
   #Regression with log2 transformation
   reg <- lm(log2(new_frac) ~ date(sample_date), data = df)
   
